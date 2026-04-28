@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Santo Rosario</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:   #f5f0e8;
+  --parch:   #ede5d0;
+  --gold:    #b8922a;
+  --gold2:   #d4a843;
+  --rose:    #8b3a52;
+  --rose2:   #c05a78;
+  --deep:    #1a1008;
+  --ink:     #2d1f0e;
+  --muted:   #7a6648;
+  --light:   #f9f5ee;
+}
+
+html, body {
+  min-height: 100%;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* ── GRAIN TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* ── DECORATIVE BORDER ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 12px;
+  border: 1px solid rgba(184,146,42,0.25);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── LAYOUT ── */
+#app {
+  position: relative;
+  z-index: 1;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 48px 28px 80px;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  text-align: center;
+  margin-bottom: 44px;
+  animation: fadeDown 0.8s ease both;
+}
+
+.cross-ornament {
+  font-size: 1.5rem;
+  color: var(--gold);
+  letter-spacing: 0.4em;
+  margin-bottom: 10px;
+}
+
+header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+header h1 em {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.52em;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.gold-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px auto 0;
+  max-width: 300px;
+}
+
+.gold-rule::before, .gold-rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold));
+}
+
+.gold-rule::after {
+  background: linear-gradient(to left, transparent, var(--gold));
+}
+
+.gold-rule span {
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+
+/* ── DÍA ACTUAL ── */
+#day-card {
+  background: var(--deep);
+  color: var(--cream);
+  border-radius: 2px;
+  padding: 22px 28px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: fadeUp 0.7s 0.1s ease both;
+  position: relative;
+  overflow: hidden;
+}
+
+#day-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(184,146,42,0.12) 0%, transparent 60%);
+}
+
+#day-card .day-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.15em;
+  font-weight: 500;
+}
+
+#day-card .day-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: rgba(245,240,232,0.55);
+  margin-top: 3px;
+}
+
+#day-card .mystery-type-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border: 1px solid var(--gold);
+  color: var(--gold2);
+  border-radius: 1px;
+  white-space: nowrap;
+}
+
+/* ── MISTERIO DEL DÍA ── */
+#mystery-intro {
+  text-align: center;
+  margin-bottom: 36px;
+  animation: fadeUp 0.7s 0.2s ease both;
+}
+
+#mystery-intro .mystery-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+#mystery-intro .mystery-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--rose);
+  line-height: 1.2;
+}
+
+/* ── ORACIONES INICIALES ── */
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--parch);
+}
+
+/* ── ACCORDION MISTERIOS ── */
+#mysteries-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeUp 0.7s 0.3s ease both;
+}
+
+.mystery-item {
+  border: 1px solid rgba(184,146,42,0.2);
+  border-radius: 2px;
+  background: var(--light);
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+
+.mystery-item.active {
+  border-color: rgba(184,146,42,0.6);
+}
+
+.mystery-item.completed .mystery-header {
+  opacity: 0.6;
+}
+
+.mystery-item.completed::before {
+  content: '';
+  display: block;
+  height: 2px;
+  background: linear-gradient(to right, var(--gold), transparent);
+}
+
+.mystery-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.mystery-header:hover {
+  background: rgba(184,146,42,0.05);
+}
+
+.mystery-num {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1;
+  min-width: 28px;
+}
+
+.mystery-header-text {
+  flex: 1;
+}
+
+.mystery-header-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.mystery-header-sub {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.mystery-chevron {
+  color: var(--gold);
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.mystery-item.open .mystery-chevron {
+  transform: rotate(180deg);
+}
+
+.mystery-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.mystery-item.open .mystery-body {
+  max-height: 600px;
+}
+
+.mystery-body-inner {
+  padding: 0 20px 20px 20px;
+  border-top: 1px solid rgba(184,146,42,0.12);
+  padding-top: 18px;
+}
+
+/* ── REFLEXIÓN ── */
+.reflection-block {
+  background: rgba(139,58,82,0.06);
+  border-left: 3px solid var(--rose2);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  border-radius: 0 2px 2px 0;
+}
+
+.reflection-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--rose);
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.reflection-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.scripture-ref {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 6px;
+  font-style: normal;
+}
+
+/* ── CUENTA CUENTAS ── */
+.beads-section {
+  margin-bottom: 14px;
+}
+
+.beads-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.beads-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.bead {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(184,146,42,0.3);
+  background: var(--parch);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.bead:hover {
+  border-color: var(--gold);
+  background: rgba(184,146,42,0.1);
+}
+
+.bead.prayed {
+  background: var(--gold);
+  border-color: var(--gold2);
+  color: var(--deep);
+}
+
+.bead.padre {
+  width: 36px;
+  height: 36px;
+  border-color: var(--rose);
+  font-size: 0.55rem;
+  color: var(--rose);
+}
+
+.bead.padre.prayed {
+  background: var(--rose);
+  color: #fff;
+}
+
+.bead-sep {
+  width: 20px;
+  height: 1px;
+  background: rgba(184,146,42,0.3);
+}
+
+.beads-note {
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* ── PRAYER TEXT ── */
+.prayer-card {
+  background: var(--parch);
+  border: 1px solid rgba(184,146,42,0.15);
+  border-radius: 2px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+}
+
+.prayer-card h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.prayer-card p {
+  font-size: 0.92rem;
+  line-height: 1.8;
+  color: var(--ink);
+}
+
+/* ── COMPLETE BUTTON ── */
+.btn-complete {
+  width: 100%;
+  background: var(--deep);
+  color: var(--gold2);
+  border: none;
+  padding: 12px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: 1px;
+  margin-top: 8px;
+}
+
+.btn-complete:hover {
+  background: var(--rose);
+  color: #fff;
+}
+
+.btn-complete.done {
+  background: rgba(0,0,0,0.08);
+  color: var(--muted);
+  cursor: default;
+}
+
+/* ── ORACIONES INICIALES/FINALES ── */
+.opening-section {
+  animation: fadeUp 0.7s 0.15s ease both;
+  margin-bottom: 32px;
+}
+
+.prayer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--light);
+  border: 1px solid rgba(184,146,42,0.18);
+  border-radius: 2px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.prayer-toggle:hover { background: var(--parch); }
+
+.prayer-toggle span {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  flex: 1;
+}
+
+.prayer-toggle .tog-icon {
+  color: var(--gold);
+  font-size: 0.7rem;
+  transition: transform 0.3s;
+}
+
+.prayer-toggle.open .tog-icon { transform: rotate(180deg); }
+
+.prayer-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.prayer-toggle.open + .prayer-collapse {
+  max-height: 800px;
+}
+
+/* ── CONCLUSIÓN ── */
+#conclusion {
+  text-align: center;
+  padding: 40px 20px;
+  display: none;
+  animation: fadeUp 0.6s ease both;
+}
+
+#conclusion.show { display: block; }
+
+#conclusion .icon { font-size: 2rem; margin-bottom: 12px; }
+
+#conclusion h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  color: var(--rose);
+  margin-bottom: 10px;
+}
+
+#conclusion p {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── PROGRESS BAR ── */
+#progress-wrap {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgba(184,146,42,0.1);
+  z-index: 100;
+}
+
+#progress-bar {
+  height: 100%;
+  background: linear-gradient(to right, var(--gold), var(--rose2));
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-style: italic;
+  animation: fadeUp 0.7s 0.5s ease both;
+}
+
+footer .cross { color: var(--gold); font-style: normal; }
+</style>
+</head>
+<body>
+
+<div id="progress-wrap"><div id="progress-bar"></div></div>
+
+<div id="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="cross-ornament">✦ ✝ ✦</div>
+    <h1>El Santo Rosario<em>Guía de oración diaria</em></h1>
+    <div class="gold-rule"><span>✦</span></div>
+  </header>
+
+  <!-- DÍA ACTUAL -->
+  <div id="day-card">
+    <div>
+      <div class="day-name" id="day-name">—</div>
+      <div class="day-date" id="day-date">—</div>
+    </div>
+    <div class="mystery-type-badge" id="mystery-type-badge">—</div>
+  </div>
+
+  <!-- MISTERIO PRINCIPAL -->
+  <div id="mystery-intro">
+    <div class="mystery-label">Misterios de hoy</div>
+    <div class="mystery-name" id="mystery-main-name">—</div>
+  </div>
+
+  <!-- ORACIONES INICIALES -->
+  <div class="opening-section">
+    <div class="section-title">Inicio del Rosario</div>
+
+    <div class="prayer-toggle" onclick="togglePrayer(this)">
+      <span>Señal de la Cruz · Credo · Padrenuestro · 3 Avemarías</span>
+      <span class="tog-icon">▼</span>
+    </div>
+    <div class="prayer-collapse">
+      <div class="prayer-card">
+        <h4>Señal de la Cruz</h4>
+        <p>En el nombre del Padre, y del Hijo, y del Espíritu Santo. Amén.</p>
+      </div>
+      <div class="prayer-card">
+        <h4>Credo Apostólico</h4>
+        <p>Creo en Dios, Padre todopoderoso, Creador del cielo y de la tierra. Creo en Jesucristo, su único Hijo, Nuestro Señor, que fue concebido por obra y gracia del Espíritu Santo, nació de Santa María Virgen, padeció bajo el poder de Poncio Pilato, fue crucificado, muerto y sepultado, descendió a los infiernos, al tercer día resucitó de entre los muertos, subió a los cielos y está sentado a la derecha de Dios, Padre todopoderoso. Desde allí ha de venir a juzgar a vivos y muertos. Creo en el Espíritu Santo, la santa Iglesia católica, la comunión de los santos, el perdón de los pecados, la resurrección de la carne y la vida eterna. Amén.</p>
+      </div>
+      <div class="prayer-card">
+        <h4>Padrenuestro</h4>
+        <p>Padre nuestro, que estás en el cielo, santificado sea tu nombre; venga a nosotros tu reino; hágase tu voluntad en la tierra como en el cielo. Danos hoy nuestro pan de cada día; perdona nuestras ofensas, como también nosotros perdonamos a los que nos ofenden; no nos dejes caer en la tentación, y líbranos del mal. Amén.</p>
+      </div>
+      <div class="prayer-card">
+        <h4>Tres Avemarías (por la fe, la esperanza y la caridad)</h4>
+        <p>Dios te salve, María, llena eres de gracia; el Señor es contigo. Bendita tú eres entre todas las mujeres, y bendito es el fruto de tu vientre, Jesús. Santa María, Madre de Dios, ruega por nosotros pecadores, ahora y en la hora de nuestra muerte. Amén.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOS 5 MISTERIOS -->
+  <div class="section-title">Los cinco misterios</div>
+  <div id="mysteries-container"></div>
+
+  <!-- ORACIONES FINALES -->
+  <div class="opening-section" style="margin-top:32px; animation-delay:0.4s">
+    <div class="section-title">Conclusión</div>
+    <div class="prayer-toggle" onclick="togglePrayer(this)">
+      <span>Salve Regina · Letanías · Oración final</span>
+      <span class="tog-icon">▼</span>
+    </div>
+    <div class="prayer-collapse">
+      <div class="prayer-card">
+        <h4>Salve Regina</h4>
+        <p>Dios te salve, Reina y Madre de misericordia, vida, dulzura y esperanza nuestra. Dios te salve. A ti llamamos los desterrados hijos de Eva. A ti suspiramos, gimiendo y llorando en este valle de lágrimas. Ea, pues, Señora, abogada nuestra, vuelve a nosotros esos tus ojos misericordiosos. Y después de este destierro, muéstranos a Jesús, fruto bendito de tu vientre. ¡Oh clementísima, oh piadosa, oh dulce Virgen María!</p>
+      </div>
+      <div class="prayer-card">
+        <h4>Oración por el Papa</h4>
+        <p>V. Ruega por nosotros, Santa Madre de Dios.<br>R. Para que seamos dignos de alcanzar las promesas de Nuestro Señor Jesucristo.</p>
+      </div>
+      <div class="prayer-card">
+        <h4>Señal de la Cruz final</h4>
+        <p>En el nombre del Padre, y del Hijo, y del Espíritu Santo. Amén.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCLUSIÓN -->
+  <div id="conclusion">
+    <div class="icon">✝</div>
+    <h3>Rosario completado</h3>
+    <p>«El Rosario es la oración que más me gusta.»<br><em>— San Juan Pablo II</em></p>
+  </div>
+
+  <footer>
+    <span class="cross">✦</span> &nbsp; Ave María, gratia plena &nbsp; <span class="cross">✦</span>
+  </footer>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATOS DEL ROSARIO
+// ═══════════════════════════════════════════════════
+
+const PRAYERS = {
+  avemaria: `Dios te salve, María, llena eres de gracia; el Señor es contigo. Bendita tú eres entre todas las mujeres, y bendito es el fruto de tu vientre, Jesús. Santa María, Madre de Dios, ruega por nosotros pecadores, ahora y en la hora de nuestra muerte. Amén.`,
+  padrenuestro: `Padre nuestro, que estás en el cielo, santificado sea tu nombre; venga a nosotros tu reino; hágase tu voluntad en la tierra como en el cielo. Danos hoy nuestro pan de cada día; perdona nuestras ofensas, como también nosotros perdonamos a los que nos ofenden; no nos dejes caer en la tentación, y líbranos del mal. Amén.`,
+  gloria: `Gloria al Padre, y al Hijo, y al Espíritu Santo. Como era en el principio, ahora y siempre, por los siglos de los siglos. Amén.`,
+  fatima: `Oh Jesús mío, perdona nuestros pecados, líbranos del fuego del infierno, lleva al cielo a todas las almas, especialmente a las más necesitadas de tu misericordia. Amén.`,
+};
+
+const MYSTERIES = {
+  gozosos: {
+    nombre: 'Misterios Gozosos',
+    color: '#b8922a',
+    dias: 'Lunes y Sábados',
+    misterios: [
+      {
+        titulo: 'La Anunciación del Ángel a María',
+        escritura: 'Lucas 1, 26–38',
+        reflexion: 'El ángel Gabriel anuncia a María que será la Madre del Salvador. Con su «Hágase en mí según tu palabra», María se convierte en el modelo de toda respuesta fiel a Dios. Meditamos hoy la disponibilidad total ante la voluntad divina, ese «sí» que cambia la historia del mundo.',
+        fruto: 'La humildad'
+      },
+      {
+        titulo: 'La Visitación de María a su prima Isabel',
+        escritura: 'Lucas 1, 39–56',
+        reflexion: 'María, llevando en su seno al Verbo encarnado, visita a Isabel, quien exclama: «¿De dónde a mí tanto bien que la madre de mi Señor venga a mí?». María trae la alegría y la gracia donde va. Contemplamos el servicio generoso al prójimo como signo del amor de Dios.',
+        fruto: 'La caridad fraterna'
+      },
+      {
+        titulo: 'El Nacimiento de Jesús en Belén',
+        escritura: 'Lucas 2, 1–20',
+        reflexion: 'El Hijo de Dios nace en la pobreza de un pesebre. Los pastores y los ángeles cantan su gloria. En ese humilde establo, la eternidad entra en el tiempo. Meditamos hoy el amor de Dios que se hace pequeño para alcanzarnos a todos.',
+        fruto: 'El desapego de los bienes materiales'
+      },
+      {
+        titulo: 'La Presentación de Jesús en el Templo',
+        escritura: 'Lucas 2, 22–38',
+        reflexion: 'José y María ofrecen al Niño Jesús en el Templo. Simeón profetiza: «Tus propios ojos han visto la salvación». Todo en la vida de Jesús cumple la Ley y señala hacia el sacrificio redentor. Meditamos la fidelidad a Dios en los compromisos de la vida.',
+        fruto: 'La obediencia y la pureza'
+      },
+      {
+        titulo: 'El Niño Jesús perdido y hallado en el Templo',
+        escritura: 'Lucas 2, 41–52',
+        reflexion: 'Durante tres días, María y José buscan angustiados a Jesús, hasta encontrarle en el Templo entre los doctores. «¿No sabíais que yo debo estar en las cosas de mi Padre?». Meditamos la búsqueda de Dios en nuestra vida y el gozo del reencuentro con Él.',
+        fruto: 'La devoción y el encuentro con Dios'
+      }
+    ]
+  },
+  luminosos: {
+    nombre: 'Misterios Luminosos',
+    color: '#4a90d9',
+    dias: 'Jueves',
+    misterios: [
+      {
+        titulo: 'El Bautismo de Jesús en el Jordán',
+        escritura: 'Mateo 3, 13–17',
+        reflexion: 'Jesús, el sin pecado, se bautiza junto a los pecadores. El Padre declara desde el cielo: «Este es mi Hijo amado, en quien me he complacido». El Espíritu desciende como paloma. Meditamos la apertura plena a la gracia bautismal que nos hace hijos de Dios.',
+        fruto: 'La apertura al Espíritu Santo'
+      },
+      {
+        titulo: 'Las Bodas de Caná',
+        escritura: 'Juan 2, 1–11',
+        reflexion: 'La intercesión de María provoca el primer milagro de Jesús, que transforma el agua en vino. «Haced lo que Él os diga», dice la Virgen, señalándonos siempre a su Hijo. Meditamos la confianza en la intercesión de María y en el poder transformador de Cristo.',
+        fruto: 'La obediencia a Dios por intercesión de María'
+      },
+      {
+        titulo: 'La Proclamación del Reino de Dios',
+        escritura: 'Marcos 1, 14–15',
+        reflexion: 'Jesús recorre Galilea proclamando la Buena Noticia: «El Reino de Dios está cerca; convertíos y creed en el Evangelio». Llama a los primeros discípulos, cura enfermos, perdona pecados. Meditamos la conversión del corazón como respuesta viva al Evangelio.',
+        fruto: 'El deseo del bien y la conversión'
+      },
+      {
+        titulo: 'La Transfiguración en el Monte Tabor',
+        escritura: 'Mateo 17, 1–8',
+        reflexion: 'Ante Pedro, Santiago y Juan, el rostro de Jesús resplandece como el sol y sus vestidos se vuelven blancos como la luz. La voz del Padre repite: «Este es mi Hijo amado». Meditamos la gloria que aguarda a los que siguen a Cristo por el camino de la cruz.',
+        fruto: 'La contemplación y el deseo del cielo'
+      },
+      {
+        titulo: 'La Institución de la Eucaristía',
+        escritura: 'Lucas 22, 19–20',
+        reflexion: 'En la Última Cena, Jesús toma el pan y el vino y los transforma en su Cuerpo y su Sangre. «Haced esto en memoria mía». La Eucaristía es el corazón de la Iglesia y la fuente de toda vida espiritual. Meditamos el amor infinito de Dios que se da a sí mismo como alimento.',
+        fruto: 'La adoración y el amor a la Eucaristía'
+      }
+    ]
+  },
+  dolorosos: {
+    nombre: 'Misterios Dolorosos',
+    color: '#8b3a52',
+    dias: 'Martes y Viernes',
+    misterios: [
+      {
+        titulo: 'La Oración en el Huerto de los Olivos',
+        escritura: 'Lucas 22, 39–46',
+        reflexion: 'En Getsemaní, Jesús ora hasta sudar sangre: «Padre, si quieres, aparta de mí este cáliz; pero no se haga mi voluntad, sino la tuya». El ángel lo conforta en su angustia. Meditamos la aceptación de la voluntad de Dios, especialmente en los momentos de prueba y sufrimiento.',
+        fruto: 'La contrición y el amor a la voluntad de Dios'
+      },
+      {
+        titulo: 'La Flagelación en la Columna',
+        escritura: 'Juan 19, 1',
+        reflexion: 'Jesús es atado a una columna y azotado con crueldad. Soporta ese dolor en silencio por nuestros pecados y nuestras debilidades. En ese cuerpo lacerado se cumple la profecía: «Por sus llagas hemos sido curados». Meditamos la penitencia y el rechazo al pecado que hiere a Cristo.',
+        fruto: 'La mortificación y la pureza'
+      },
+      {
+        titulo: 'La Coronación de Espinas',
+        escritura: 'Mateo 27, 27–31',
+        reflexion: 'Los soldados trenzan una corona de espinas y la clavan en la cabeza de Jesús, vistiéndole de púrpura para burlarse: «Salve, Rey de los judíos». El Rey del universo es ultrajado. Meditamos la humildad ante las humillaciones y la fortaleza interior que nace de la fe.',
+        fruto: 'La humildad y la fortaleza moral'
+      },
+      {
+        titulo: 'Jesús carga con la Cruz',
+        escritura: 'Juan 19, 17',
+        reflexion: 'Jesús carga su cruz camino del Calvario, cayendo en el camino. Simón de Cirene le ayuda. Las mujeres de Jerusalén lloran. Cada caída es un abrazo a nuestra humanidad rota. Meditamos cómo cargar nuestra propia cruz diaria con paciencia y confianza en Él.',
+        fruto: 'La paciencia en las adversidades'
+      },
+      {
+        titulo: 'La Crucifixión y Muerte de Jesús',
+        escritura: 'Juan 19, 25–30',
+        reflexion: 'Jesús es crucificado entre dos ladrones. Desde la cruz, encomienda a su madre al discípulo amado, perdona a sus verdugos y en el último aliento entrega su espíritu al Padre. María está al pie de la cruz. Meditamos el amor supremo: «No hay amor más grande que dar la vida por los amigos».',
+        fruto: 'La salvación y el amor a la cruz'
+      }
+    ]
+  },
+  gloriosos: {
+    nombre: 'Misterios Gloriosos',
+    color: '#4a7c59',
+    dias: 'Miércoles y Domingos',
+    misterios: [
+      {
+        titulo: 'La Resurrección de Jesús',
+        escritura: 'Juan 20, 1–18',
+        reflexion: 'Al amanecer del primer día, el sepulcro está vacío. Jesús resucitado se aparece primero a María Magdalena: «¡He visto al Señor!». La muerte ha sido vencida. Meditamos la alegría pascual y la certeza de que Cristo vive y que nosotros también resucitaremos con Él.',
+        fruto: 'La fe y la alegría de la resurrección'
+      },
+      {
+        titulo: 'La Ascensión de Jesús al Cielo',
+        escritura: 'Hechos 1, 9–11',
+        reflexion: 'Cuarenta días después de la resurrección, Jesús asciende a los cielos ante sus discípulos. «Id y haced discípulos a todas las naciones». Su ausencia visible nos abre a una presencia más profunda en el Espíritu. Meditamos el deseo del cielo como patria definitiva.',
+        fruto: 'El deseo del cielo y la esperanza'
+      },
+      {
+        titulo: 'La Venida del Espíritu Santo (Pentecostés)',
+        escritura: 'Hechos 2, 1–11',
+        reflexion: 'María y los apóstoles reunidos en oración reciben el Espíritu Santo en lenguas de fuego. Nacida en ese momento, la Iglesia sale a evangelizar a todos los pueblos. Meditamos la apertura a los dones del Espíritu que nos da valor para vivir y anunciar el Evangelio.',
+        fruto: 'El celo apostólico y los dones del Espíritu'
+      },
+      {
+        titulo: 'La Asunción de la Virgen María',
+        escritura: 'Apocalipsis 12, 1',
+        reflexion: 'María, libre del pecado y llena de gracia, es elevada en cuerpo y alma a la gloria del cielo. Es el destino que Dios nos tiene preparado a todos los que le amamos. Meditamos la muerte como umbral hacia la vida plena y la confianza de reencontrarnos con Dios.',
+        fruto: 'La gracia de una muerte santa'
+      },
+      {
+        titulo: 'La Coronación de María como Reina del Cielo',
+        escritura: 'Apocalipsis 12, 1',
+        reflexion: 'María es coronada Reina del Cielo y de la Tierra por la Santísima Trinidad. Como madre, intercede sin cesar por sus hijos en la tierra. Meditamos la ternura maternal de María hacia cada uno de nosotros y la confianza total en su intercesión.',
+        fruto: 'La confianza en María y el deseo del cielo'
+      }
+    ]
+  }
+};
+
+const DAY_MYSTERIES = {
+  0: 'gloriosos',  // Domingo
+  1: 'gozosos',   // Lunes
+  2: 'dolorosos', // Martes
+  3: 'luminosos', // Miércoles
+  4: 'dolorosos', // Jueves → luminosos según JP II, dolorosos es tradición anterior
+  5: 'dolorosos', // Viernes
+  6: 'gozosos'    // Sábado
+};
+
+// Jueves = luminosos (reforma de Juan Pablo II)
+DAY_MYSTERIES[4] = 'luminosos';
+
+const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MONTH_NAMES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+// ═══════════════════════════════════════════════════
+// ESTADO
+// ═══════════════════════════════════════════════════
+const today = new Date();
+const dayOfWeek = today.getDay();
+const mysteryKey = DAY_MYSTERIES[dayOfWeek];
+const mysteryData = MYSTERIES[mysteryKey];
+
+// Progreso: array de 5 booleanos + beads
+let progress = { mysteries: [false,false,false,false,false] };
+let beadState = {}; // { mysteryIdx: { padre: bool, aves: [bool x10], gloria: bool } }
+
+for (let i = 0; i < 5; i++) {
+  beadState[i] = {
+    padre: false,
+    aves: Array(10).fill(false),
+    gloria: false
+  };
+}
+
+// ═══════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════
+
+function init() {
+  // Cabecera día
+  document.getElementById('day-name').textContent = DAY_NAMES[dayOfWeek];
+  document.getElementById('day-date').textContent =
+    `${today.getDate()} de ${MONTH_NAMES[today.getMonth()]} de ${today.getFullYear()}`;
+  document.getElementById('mystery-type-badge').textContent = mysteryData.nombre;
+  document.getElementById('mystery-main-name').textContent = mysteryData.nombre;
+  document.getElementById('mystery-main-name').style.color = mysteryData.color;
+
+  renderMysteries();
+}
+
+function renderMysteries() {
+  const container = document.getElementById('mysteries-container');
+  container.innerHTML = '';
+
+  mysteryData.misterios.forEach((m, idx) => {
+    const item = document.createElement('div');
+    item.className = 'mystery-item';
+    item.id = `mystery-${idx}`;
+
+    item.innerHTML = `
+      <div class="mystery-header" onclick="toggleMystery(${idx})">
+        <div class="mystery-num">${idx + 1}</div>
+        <div class="mystery-header-text">
+          <div class="mystery-header-title">${m.titulo}</div>
+          <div class="mystery-header-sub">Fruto: ${m.fruto}</div>
+        </div>
+        <div class="mystery-chevron">▼</div>
+      </div>
+      <div class="mystery-body">
+        <div class="mystery-body-inner">
+
+          <div class="reflection-block">
+            <div class="reflection-label">✦ Reflexión</div>
+            <div class="reflection-text">${m.reflexion}</div>
+            <div class="scripture-ref">— ${m.escritura}</div>
+          </div>
+
+          <div class="beads-section">
+            <div class="beads-label">Cuenta las cuentas</div>
+            <div class="beads-row">
+              <div class="bead padre" id="bead-${idx}-padre" onclick="toggleBead(${idx},'padre')" title="Padrenuestro">P</div>
+              <div class="bead-sep"></div>
+              ${Array(10).fill(0).map((_,i) => `
+                <div class="bead" id="bead-${idx}-ave-${i}" onclick="toggleBead(${idx},'ave',${i})" title="Avemaría ${i+1}">${i+1}</div>
+              `).join('')}
+              <div class="bead-sep"></div>
+              <div class="bead padre" id="bead-${idx}-gloria" onclick="toggleBead(${idx},'gloria')" title="Gloria">G</div>
+            </div>
+            <div class="beads-note">P = Padrenuestro · 1–10 = Avemarías · G = Gloria + Oración de Fátima</div>
+          </div>
+
+          <div class="prayer-toggle" onclick="togglePrayer(this)">
+            <span>Ver oraciones</span>
+            <span class="tog-icon">▼</span>
+          </div>
+          <div class="prayer-collapse">
+            <div class="prayer-card">
+              <h4>Padrenuestro</h4>
+              <p>${PRAYERS.padrenuestro}</p>
+            </div>
+            <div class="prayer-card">
+              <h4>Avemaría</h4>
+              <p>${PRAYERS.avemaria}</p>
+            </div>
+            <div class="prayer-card">
+              <h4>Gloria</h4>
+              <p>${PRAYERS.gloria}</p>
+            </div>
+            <div class="prayer-card">
+              <h4>Oración de Fátima</h4>
+              <p>${PRAYERS.fatima}</p>
+            </div>
+          </div>
+
+          <button class="btn-complete" id="btn-${idx}" onclick="completeMystery(${idx})">
+            ✓ Misterio rezado
+          </button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(item);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// INTERACCIÓN
+// ═══════════════════════════════════════════════════
+
+function toggleMystery(idx) {
+  const item = document.getElementById(`mystery-${idx}`);
+  const isOpen = item.classList.contains('open');
+
+  // Cerrar todos
+  document.querySelectorAll('.mystery-item').forEach(el => el.classList.remove('open'));
+
+  if (!isOpen) {
+    item.classList.add('open');
+    item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function togglePrayer(el) {
+  el.classList.toggle('open');
+}
+
+function toggleBead(mysteryIdx, type, aveIdx) {
+  if (type === 'padre') {
+    beadState[mysteryIdx].padre = !beadState[mysteryIdx].padre;
+    const el = document.getElementById(`bead-${mysteryIdx}-padre`);
+    el.classList.toggle('prayed', beadState[mysteryIdx].padre);
+  } else if (type === 'ave') {
+    beadState[mysteryIdx].aves[aveIdx] = !beadState[mysteryIdx].aves[aveIdx];
+    const el = document.getElementById(`bead-${mysteryIdx}-ave-${aveIdx}`);
+    el.classList.toggle('prayed', beadState[mysteryIdx].aves[aveIdx]);
+  } else if (type === 'gloria') {
+    beadState[mysteryIdx].gloria = !beadState[mysteryIdx].gloria;
+    const el = document.getElementById(`bead-${mysteryIdx}-gloria`);
+    el.classList.toggle('prayed', beadState[mysteryIdx].gloria);
+  }
+}
+
+function completeMystery(idx) {
+  progress.mysteries[idx] = true;
+
+  const item = document.getElementById(`mystery-${idx}`);
+  item.classList.add('completed');
+  item.classList.remove('open');
+
+  const btn = document.getElementById(`btn-${idx}`);
+  btn.textContent = '✓ Rezado';
+  btn.classList.add('done');
+  btn.disabled = true;
+
+  // Marcar todas las cuentas automáticamente
+  beadState[idx].padre = true;
+  beadState[idx].aves.fill(true);
+  beadState[idx].gloria = true;
+  document.getElementById(`bead-${idx}-padre`).classList.add('prayed');
+  document.getElementById(`bead-${idx}-gloria`).classList.add('prayed');
+  for (let i = 0; i < 10; i++) {
+    document.getElementById(`bead-${idx}-ave-${i}`).classList.add('prayed');
+  }
+
+  // Abrir siguiente misterio automáticamente
+  if (idx < 4) {
+    setTimeout(() => toggleMystery(idx + 1), 400);
+  }
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const done = progress.mysteries.filter(Boolean).length;
+  const pct = (done / 5) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+
+  if (done === 5) {
+    setTimeout(() => {
+      document.getElementById('conclusion').classList.add('show');
+      document.getElementById('conclusion').scrollIntoView({ behavior: 'smooth' });
+    }, 500);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>
